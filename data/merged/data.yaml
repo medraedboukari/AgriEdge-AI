@@ -1,0 +1,12 @@
+train: /home/medraedboukari/Desktop/AgriEdge-AI/data/merged/train/images
+val: /home/medraedboukari/Desktop/AgriEdge-AI/data/merged/valid/images
+test: /home/medraedboukari/Desktop/AgriEdge-AI/data/merged/test/images
+
+nc: 23
+names: [
+  'Chlorosis', 'Water Excess', 'Sun Excess', 'Harmful Insects',
+  'Water Deficiency', 'Sun Deficiency', 'Powdery Mildew', 'Parasites', 'Abnormal Redness',
+  'Bacterial Spot', 'Early Blight', 'Healthy', 'Late Blight', 'Leaf Mold',
+  'Leaf Miner', 'Mosaic Virus', 'Septoria', 'Spider Mites', 'Yellow Leaf Curl',
+  'CBSD', 'CGM', 'CMD', 'CASSAVA_HEALTHY'
+]
