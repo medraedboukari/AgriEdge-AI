@@ -7,7 +7,7 @@
     <uses-feature android:name="android.hardware.camera" android:required="true"/>
 
     <application
-        android:label="AgriEdge-AI"
+        android:label="PlantCare AI"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
