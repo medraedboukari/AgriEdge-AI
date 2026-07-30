@@ -7,3 +7,11 @@ data/*.zip
 venv/
 __pycache__/
 *.pyc
+*.pt
+*.engine
+*.onnx
+Untitled*
+untitled*
+yolo11n/
+yolo26n/
+.ipynb_checkpoints/
