@@ -9,25 +9,14 @@ class ResultScreen extends StatelessWidget {
 
   const ResultScreen({super.key, required this.result, required this.image});
 
-  Color _confidenceColor(double c) {
-    if (c >= 80) return const Color(0xFF2E7D32);
-    if (c >= 60) return const Color(0xFFF57F17);
-    return const Color(0xFFC62828);
-  }
-
-  String _confidenceLabel(double c) {
-    if (c >= 80) return 'High Confidence';
-    if (c >= 60) return 'Moderate Confidence';
-    return 'Low Confidence';
-  }
-
   @override
   Widget build(BuildContext context) {
     final disease = result['disease'] ?? 'Unknown';
     final confidence = (result['confidence'] ?? 0.0).toDouble();
     final description = result['description'] ?? '';
     final recommendation = result['recommendation'] ?? '';
-    final color = _confidenceColor(confidence);
+    final temperature = result['temperature']?.toDouble();
+    final humidity = result['humidity']?.toDouble();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF6FAF7),
@@ -86,25 +75,6 @@ class ResultScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: color.withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            _confidenceLabel(confidence),
-                            style: TextStyle(
-                              color: color,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
                         Text(
                           disease,
                           style: const TextStyle(
@@ -112,33 +82,6 @@ class ResultScreen extends StatelessWidget {
                             fontWeight: FontWeight.w800,
                             color: Color(0xFF1A1A1A),
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: LinearProgressIndicator(
-                                  value: confidence / 100,
-                                  minHeight: 10,
-                                  backgroundColor: const Color(0xFFF0F0F0),
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    color,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Text(
-                              '${confidence.toStringAsFixed(0)}%',
-                              style: TextStyle(
-                                color: color,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),
@@ -159,6 +102,80 @@ class ResultScreen extends StatelessWidget {
                     iconColor: const Color(0xFF1B8A4C),
                     bgColor: const Color(0xFFE8F5E9),
                   ),
+                  if (temperature != null && humidity != null) ...[
+                    const SizedBox(height: 14),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF3E0),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.thermostat_rounded,
+                                color: Color(0xFFE65100),
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                'Environmental Conditions',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    '${temperature.toStringAsFixed(1)}°C',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  const Text(
+                                    'Temperature',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    '${humidity.toStringAsFixed(0)}%',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  const Text(
+                                    'Humidity',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 24),
                   Row(
                     children: [
@@ -212,8 +229,7 @@ class ResultScreen extends StatelessWidget {
                           onPressed: () {
                             Share.share(
                               '🌿 PlantCare AI Diagnosis\n\n'
-                              '📋 Disease: $disease\n'
-                              '📊 Confidence: ${confidence.toStringAsFixed(0)}%\n\n'
+                              '📋 Disease: $disease\n\n'
                               'ℹ️ $description\n\n'
                               '💊 Treatment: $recommendation',
                             );
