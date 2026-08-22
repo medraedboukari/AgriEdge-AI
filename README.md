@@ -92,4 +92,6 @@ Supervised by Mme. Oumaima Jouini and Mme. Imen Bouabidi (ESPRIT, Department of 
 
 ## 📜 License
 
-This project uses publicly available datasets under CC BY 4.0 licenses (see dataset sources in the report). Code is available for academic and research purposes.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+Datasets used are publicly available under CC BY 4.0 licenses (see dataset sources in the report).
