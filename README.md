@@ -19,38 +19,34 @@ AgriEdge-AI combines computer vision, embedded deployment, wireless IoT sensing,
 
 ---
 
+## 🏗️ System Architecture
+
+![AgriEdge-AI System Architecture](docs/figures/EN_Figure1_System_Architecture.png)
+
+---
+
 ## 📊 Key Results
 
 | Component | Result |
 |---|---|
-| Dataset | 47,813 images, 24 disease classes, fused from 9 public sources |
-| Best model | YOLO11n, mAP50 = 0.659 (2.6M params) |
-| Edge inference (Jetson Nano, TensorRT FP16, 416x416) | 31 FPS (55% above real-time target) |
-| LoRa link | RSSI: -67 to -78 dBm, reliable transmission |
-| End-to-end API response (image + sensor data) | 235.8 ms |
+| Dataset | 47,813 images, 24 disease, pest, and stress classes, fused from 9 public sources |
+| Best model | YOLO11n, mAP50 = 0.659 (2.6M params), computed on the validation split |
+| Edge inference (Jetson Nano, TensorRT FP16, 640x640, retained configuration) | 21.84 FPS, 45.78 ms |
+| Edge inference (416x416, throughput-oriented variant) | 31 FPS |
+| LoRa link | RSSI: -74 to -76 dBm at short range (laboratory conditions) |
+| End-to-end API response (image + sensor data) | 235.8 ms (representative test) |
 | Mobile app | Tested end-to-end on physical Android device |
 
-Two exploratory architectures were also evaluated and transparently reported, including a negative result:
-- **AgriYOLO** (YOLO11n + EfficientNet-B0 dual-backbone fusion): mAP50 = 0.486
+Three exploratory architectures were also evaluated and transparently reported:
+- **Two-stage detect-then-classify pipeline** (YOLO11n + EfficientNet-B0 classifier): 96.99% classification accuracy, ~14 FPS combined
+- **AgriYOLO** (YOLO11n + EfficientNet-B0 dual-backbone fusion): mAP50 = 0.486 (negative result, analyzed)
 - **YOLO11n_Opt** (scale-reduced variant, 1.5M params): mAP50 = 0.570, up to 50 FPS at 416x416
-
----
-
-## 🏗️ System Architecture
-
-```
-BME680 (I2C) -> ESP32-S3 #1 -> LoRa 433MHz -> ESP32-S3 #2 -> UART -> Jetson Nano
-                                                                          |
-                                                    YOLO11n + TensorRT + FastAPI
-                                                                          |
-                                                                  WiFi -> Mobile App
-```
 
 ---
 
 ## 🛠️ Tech Stack
 
-**Vision & ML:** YOLOv8/YOLO11 (Ultralytics), PyTorch, TensorRT, OpenCV
+**Vision & ML:** YOLOv8/YOLO11 (Ultralytics), PyTorch, TensorRT, OpenCV, EfficientNet-B0
 **Embedded:** NVIDIA Jetson Nano, ESP32-S3, C++ (Arduino/PlatformIO)
 **IoT:** LoRa (SX1278), BME680, UART
 **Backend:** Python, FastAPI, PyCUDA
@@ -61,23 +57,24 @@ BME680 (I2C) -> ESP32-S3 #1 -> LoRa 433MHz -> ESP32-S3 #2 -> UART -> Jetson Nano
 
 ## 📁 Repository Structure
 
-```
 AgriEdge-AI/
-  data/                 - Dataset fusion and preprocessing scripts
-  training/              - Model training notebooks (ablation study, AgriYOLO, YOLO11n_Opt)
-  deployment_jetson/     - TensorRT export, FastAPI server, UART listener
-  firmware/               - ESP32-S3 sensor node and LoRa gateway code
-  mobile_app/             - Flutter application (agri_ai_app)
-  hardware/                - KiCad schematics
-  docs/                     - Report, article, figures
-```
+data/ - Dataset fusion and preprocessing scripts
+training/ - Model training notebooks (comparative study, AgriYOLO, YOLO11n_Opt)
+deployment_jetson/ - TensorRT/pycuda inference, FastAPI server, UART listener, test scripts
+esp32/ - ESP32-S3 sensor node and LoRa gateway firmware
+mobile_app/ - Flutter application (agri_ai_app)
+models/ - Final ONNX export (YOLO11n, 640x640)
+docs/figures/ - Report and article figures, validation captures, KiCad schematics
+notebooks/ - Dataset exploration notebook
+
+
+Model training notebooks (comparative study, AgriYOLO, YOLO11n_Opt, EfficientNet classifier) were run on Kaggle; see the internship report for full notebook references.
 
 ---
 
 ## 📄 Documentation
 
-- 📘 Full internship report (French) - `docs/report/main.tex`
-- 📄 Scientific article (MDPI format, in preparation) - `docs/article/article.tex`
+- 📘 Full internship report (French) and scientific article (MDPI, AgriEngineering) are maintained separately and will be added to this repository at a later stage.
 
 ---
 
@@ -94,4 +91,4 @@ Supervised by Mme. Oumaima Jouini and Mme. Imen Bouabidi (ESPRIT, Department of 
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
-Datasets used are publicly available under CC BY 4.0 licenses (see dataset sources in the report).
+Datasets used are derived from publicly available sources on Roboflow Universe; license terms should be verified per source before redistribution (see the internship report for details).
