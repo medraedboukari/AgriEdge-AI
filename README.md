@@ -4,7 +4,7 @@
 
 AgriEdge-AI combines computer vision, embedded deployment, wireless IoT sensing, and mobile application development into a single validated end-to-end system — designed to run entirely without cloud dependency, for use in connectivity-constrained agricultural regions.
 
-> 🎓 Developed as part of an R&D internship at ESPRIT (Tunisia). Abstract submitted to the **embedded world Conference 2027** (Nuremberg, Germany).
+> 🎓 Developed as part of an R&D internship at ESPRIT (Tunisia).
 
 ---
 
